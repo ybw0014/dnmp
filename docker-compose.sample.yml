@@ -50,50 +50,6 @@ services:
     networks:
       - default
 
-#  php56:
-#    build:
-#      context: ./services/php
-#      args:
-#        PHP_VERSION: php:${PHP56_VERSION}-fpm-alpine
-#        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-#        PHP_EXTENSIONS: ${PHP56_EXTENSIONS}
-#        TZ: "$TZ"
-#    container_name: php56
-#    expose:
-#      - 9501
-#    volumes:
-#      - ${SOURCE_DIR}:/www/:rw
-#      - ${PHP56_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
-#      - ${PHP56_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
-#      - ${PHP56_LOG_DIR}:/var/log/php
-#      - ${DATA_DIR}/composer:/tmp/composer
-#    restart: always
-#    cap_add:
-#      - SYS_PTRACE
-#    networks:
-#      - default
-
-#  php54:
-#    build:
-#      context: ./services/php54
-#      args:
-#        PHP_VERSION: php:${PHP54_VERSION}-fpm
-#        CONTAINER_PACKAGE_URL: ${CONTAINER_PACKAGE_URL}
-#        PHP_EXTENSIONS: ${PHP54_EXTENSIONS}
-#        TZ: "$TZ"
-#    container_name: php54
-#    volumes:
-#      - ${SOURCE_DIR}:/www/:rw
-#      - ${PHP54_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
-#      - ${PHP54_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
-#      - ${PHP54_LOG_DIR}:/var/log/php
-#      - ${DATA_DIR}/composer:/tmp/composer
-#    restart: always
-#    cap_add:
-#      - SYS_PTRACE
-#    networks:
-#      - default
-
   mysql:
     image: mysql:${MYSQL_VERSION}
     container_name: mysql
@@ -108,21 +64,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       TZ: "$TZ"
-
-#  mysql5:
-#    image: mysql:${MYSQL5_VERSION}
-#    container_name: mysql5
-#    ports:
-#      - "${MYSQL5_HOST_PORT}:3306"
-#    volumes:
-#      - ${MYSQL5_CONF_FILE}:/etc/mysql/conf.d/mysql.cnf:ro
-#      - ${DATA_DIR}/mysql5:/var/lib/mysql/:rw
-#    restart: always
-#    networks:
-#      - default
-#    environment:
-#      MYSQL_ROOT_PASSWORD: "${MYSQL5_ROOT_PASSWORD}"
-#      TZ: "$TZ"
 
 #  openresty:
 #    image:  openresty/openresty:${OPENRESTY_VERSION}
@@ -143,44 +84,20 @@ services:
 #    networks:
 #      - default
 
-#  redis:
-#    image: redis:${REDIS_VERSION}
-#    container_name: redis
-#    ports:
-#      - "${REDIS_HOST_PORT}:6379"
-#    volumes:
-#      - ${REDIS_CONF_FILE}:/etc/redis.conf:ro
-#      - ${DATA_DIR}/redis:/data/:rw
-#    restart: always
-#    entrypoint: ["redis-server", "/etc/redis.conf"]
-#    environment:
-#      TZ: "$TZ"
-#    networks:
-#      - default
-
-#  memcached:
-#    image: memcached:${MEMCACHED_VERSION}
-#    container_name: memcached
-#    ports:
-#      - "${MEMCACHED_HOST_PORT}:11211"
-#    environment:
-#       MEMCACHED_CACHE_SIZE: "${MEMCACHED_CACHE_SIZE}"
-#    networks:
-#      - default
-
-#  rabbitmq:
-#    image: rabbitmq:${RABBITMQ_VERSION}
-#    container_name: rabbitmq
-#    restart: always
-#    ports:
-#      - "${RABBITMQ_HOST_PORT_C}:5672"
-#      - "${RABBITMQ_HOST_PORT_S}:15672"
-#    environment:
-#       TZ: "$TZ"
-#       RABBITMQ_DEFAULT_USER: "${RABBITMQ_DEFAULT_USER}"
-#       RABBITMQ_DEFAULT_PASS: "${RABBITMQ_DEFAULT_PASS}"
-#    networks:
-#          - default
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: redis
+    ports:
+      - "${REDIS_HOST_PORT}:6379"
+    volumes:
+      - ${REDIS_CONF_FILE}:/etc/redis.conf:ro
+      - ${DATA_DIR}/redis:/data/:rw
+    restart: always
+    entrypoint: ["redis-server", "/etc/redis.conf"]
+    environment:
+      TZ: "$TZ"
+    networks:
+      - default
 
 #  phpmyadmin:
 #    image: phpmyadmin/phpmyadmin:latest
@@ -238,53 +155,6 @@ services:
 #    networks:
 #      - default
 
-#  elasticsearch:
-#    build:
-#      context: ./services/elasticsearch
-#      args:
-#        ELASTICSEARCH_VERSION: ${ELASTICSEARCH_VERSION}
-#        ELASTICSEARCH_PLUGINS: ${ELASTICSEARCH_PLUGINS}
-#    container_name: elasticsearch
-#    environment:
-#      - TZ=$TZ
-#      - discovery.type=single-node
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    volumes:
-#      - ${DATA_DIR}/esdata:/usr/share/elasticsearch/data
-#      - ${ELASTICSEARCH_CONF_FILE}:/usr/share/elasticsearch/config/elasticsearch.yml
-#    hostname: elasticsearch
-#    restart: always
-#    ports:
-#      - "${ELASTICSEARCH_HOST_PORT_C}:9200"
-#      - "${ELASTICSEARCH_HOST_PORT_S}:9300"
-
-#  kibana:
-#    image: kibana:${KIBANA_VERSION}
-#    container_name: kibana
-#    environment:
-#      TZ: "$TZ"
-#      elasticsearch.hosts: http://elasticsearch:9200
-#      I18N_LOCALE: "${KIBANA_I18N_LOCALE}"
-#    hostname: kibana
-#    depends_on:
-#      - elasticsearch
-#    restart: always
-#    ports:
-#      - "${KIBANA_HOST}:5601"
-
-#  logstash:
-#    image: logstash:${LOGSTASH_VERSION}
-#    container_name: logstash
-#    hostname: logstash
-#    restart: always
-#    depends_on:
-#      - elasticsearch
-#    environment:
-#      TZ: "$TZ"
-#    ports:
-#      - "${LOGSTASH_HOST_PORT_C}:9600"
-#      - "${LOGSTASH_HOST_PORT_S}:5044"
-
 #  node:
 #    image: node:${NODE_VERSION}
 #    environment:
@@ -297,7 +167,6 @@ services:
 #      - default
 #    stdin_open: true
 #    tty: true
-
 
 #  supervisor:
 #    build:
